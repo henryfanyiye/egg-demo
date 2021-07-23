@@ -7,11 +7,11 @@ const rules = require('../lib/validateRules');
 
 module.exports = (ruleName) => {
   return async function validateParams(ctx, next) {
-    const { params, request, response } = ctx;
+    const { request, response } = ctx;
     try {
-      const { params, header, query, body } = rules[ruleName];
-      if (params) ctx.validate(header, request.params);
-      if (header) ctx.validate(header, request.headers);
+      const { params, headers, query, body } = rules[ruleName];
+      if (params) ctx.validate(params, ctx.params);
+      if (headers) ctx.validate(headers, request.headers);
       if (query) ctx.validate(query, request.query);
       if (query) ctx.validate(body, request.body);
       await next();
