@@ -10,7 +10,7 @@ const { Controller } = require('egg');
 const errorCode = require('../extend/errorCode');
 
 class BaseController extends Controller {
-  success(data, msg = 'SUCCESS', code = 100) {
+  success(data, msg = 'SUCCESS', code = 0) {
     const { ctx } = this;
     ctx.status = 200;
     ctx.body = {

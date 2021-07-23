@@ -26,21 +26,36 @@ class UserController extends BaseController {
   }
 
   /**
+   * 检查用户名或邮箱可用
+   */
+  async checkAvailable() {
+    const { ctx, service } = this;
+    const { username, email } = ctx.request.body;
+    try {
+      await service.userService.checkAvailable(username, email);
+      this.success();
+    } catch (err) {
+      this.error(err.code);
+    }
+  }
+
+  /**
    * 用户注册
    */
   async register() {
     const { ctx, service } = this;
-    const { request } = ctx;
-    return await service.userService.register(request.body);
-    this.success();
+    try {
+      await service.userService.register(ctx.request.body);
+      this.success();
+    } catch (err) {
+      this.error(err.code, err.msg);
+    }
   }
 
   /**
    * 用户登录
    */
   async login() {
-    const { ctx, app } = this;
-    const { request } = ctx;
     this.success();
   }
 
@@ -48,8 +63,6 @@ class UserController extends BaseController {
    * 查询用户信息
    */
   async detail() {
-    const { ctx, app } = this;
-    const { request } = ctx;
     this.success();
   }
 
@@ -57,8 +70,6 @@ class UserController extends BaseController {
    * 更新用户信息
    */
   async update() {
-    const { ctx, app } = this;
-    const { request } = ctx;
     this.success();
   }
 
@@ -66,8 +77,6 @@ class UserController extends BaseController {
    * 用户登出
    */
   async logout() {
-    const { ctx, app } = this;
-    const { request } = ctx;
     this.success();
   }
 }
