@@ -6,6 +6,11 @@ module.exports = {
     code: 422,
     msg: 'invalid_param'
   },
+  UNAUTHORIZED: {
+    status: 401,
+    code: 401,
+    msg: 'Unauthorized'
+  },
   REGISTER_ERROR: {
     status: 400,
     code: 101,
@@ -20,5 +25,15 @@ module.exports = {
     status: 400,
     code: 103,
     msg: 'email is exist.'
+  },
+  LOGIN_ERROR: {
+    status: 400,
+    code: 201,
+    msg: 'Login error.'
+  },
+  INVALID_USERNAME: {
+    status: 400,
+    code: 202,
+    msg: 'Invalid username or password.'
   }
 };

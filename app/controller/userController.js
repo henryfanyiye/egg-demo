@@ -5,6 +5,7 @@
  * 用户相关操作
  */
 
+const { nanoid } = require('nanoid');
 const BaseController = require('./baseController');
 
 class UserController extends BaseController {
@@ -32,22 +33,38 @@ class UserController extends BaseController {
       await service.userService.register(ctx.request.body);
       this.success();
     } catch (err) {
-      this.error(err.code, err.msg);
+      this.error('REGISTER_ERROR', err.msg);
     }
   }
 
   /**
    * 用户登录
    */
-  async login() {
-    this.success();
+  async loginByUsername() {
+    const { ctx, service } = this;
+    try {
+      // 校验用户
+      const { username, password } = ctx.request.body;
+      const { user_id } = await service.userService.loginByUsername(username, password);
+
+      // 生成token
+      const token = await service.userService.generateToken(user_id);
+      this.success({ token });
+    } catch (err) {
+      this.error(err.code, err.msg);
+    }
   }
 
   /**
    * 查询用户信息
    */
   async detail() {
-    this.success();
+    try {
+      const user = await this.ctx.service.userService.findByUserId(this.ctx.userId);
+      this.success(user[0]);
+    } catch (err) {
+      this.error(err.code, err.msg);
+    }
   }
 
   /**

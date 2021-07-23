@@ -13,10 +13,10 @@ module.exports = (ruleName) => {
       if (params) ctx.validate(params, ctx.params);
       if (headers) ctx.validate(headers, request.headers);
       if (query) ctx.validate(query, request.query);
-      if (query) ctx.validate(body, request.body);
-      await next();
+      if (body) ctx.validate(body, request.body);
     } catch (err) {
-      response.error(ctx, 'INVALID_PARAM', null, err.errors);
+      return response.error(ctx, 'INVALID_PARAM', null, err.errors);
     }
+    await next();
   };
 };

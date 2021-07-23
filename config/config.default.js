@@ -18,7 +18,7 @@ module.exports = appInfo => {
   // add your middleware config here
   config.middleware = [
     'requestLogger',
-    // 'authorization'
+    'notFoundHandler'
   ];
 
   config.cluster = {

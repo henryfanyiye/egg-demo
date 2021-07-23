@@ -27,11 +27,18 @@ module.exports = {
 
   register: {
     body: {
-      nickName: { type: 'string' },
+      nickname: { type: 'string' },
       username: { type: 'string' },
-      password: { type: 'password?' },
+      password: { type: 'password?', min: 8 },
       email: { type: 'email?' },
       mobile: { type: 'string?', max: 11, min: 11 }
+    }
+  },
+
+  loginByUsername: {
+    body: {
+      username: { type: 'string' },
+      password: { type: 'password' },
     }
   }
 };

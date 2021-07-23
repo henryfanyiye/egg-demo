@@ -17,21 +17,34 @@ class UserService extends Service {
   }
 
   async register(data) {
-    try {
-      data.user_id = nanoid();
-      data.nick_name = data.nickName;
-      delete data.nickName;
-      return await this.app.mysql.insert('user', data);
-    } catch (err) {
-      this.ctx.logger.error(err.message);
-      throw { code: 'REGISTER_ERROR', msg: err.message };
+    data.user_id = nanoid();
+    return await this.app.mysql.insert('user', data);
+  }
+
+  async generateToken(user_id) {
+    const key = `u:${user_id}`;
+    let token = await this.app.redis.get(key);
+    if (token) await this.app.redis.expire(token, 0);
+    token = nanoid();
+    const expireTime = 60 * 60 * 24;
+    await this.app.redis.set(token, user_id, 'EX', expireTime);
+    await this.app.redis.set(key, token, 'EX', expireTime);
+    return token;
+  }
+
+  async loginByUsername(username, password) {
+    const user = await this.app.mysql.get('user', { username, password });
+    if (!user) {
+      throw { code: 'INVALID_USERNAME' };
     }
+    return user;
   }
 
-  async loginByUsername() {
-  }
-
-  async findByUserId() {
+  async findByUserId(user_id) {
+    return await this.app.mysql.select('user', {
+      where: { user_id },
+      columns: [ 'nickname', 'username', 'password', 'email', 'mobile' ]
+    });
   }
 
   async updateInfo() {
