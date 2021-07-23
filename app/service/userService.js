@@ -50,6 +50,19 @@ class UserService extends Service {
   async updateInfo() {
   }
 
+  async logout() {
+    const { ctx, app } = this;
+    let token = ctx.request.get('Authorization');
+
+    if (token) {
+      token = token.replace('Bearer ', '');
+      const userId = app.redis.get(token);
+      await app.redis.expire(token, 0);
+      await app.redis.expire(`u:${userId}`, 0);
+    }
+
+    return;
+  }
 }
 
 module.exports = UserService;
