@@ -5,7 +5,6 @@
  * 用户相关操作
  */
 
-const { nanoid } = require('nanoid');
 const BaseController = require('./baseController');
 
 class UserController extends BaseController {
@@ -78,6 +77,14 @@ class UserController extends BaseController {
    * 用户登出
    */
   async logout() {
+    const { ctx, app } = this;
+    let token = ctx.request.get('Authorization');
+    if (!token) return this.success();
+
+    token = token.replace('Bearer ', '');
+    const userId = app.redis.get(token);
+    await app.redis.expire(token, 0);
+    await app.redis.expire(`u:${userId}`, 0);
     this.success();
   }
 }
