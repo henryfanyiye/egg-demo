@@ -5,6 +5,19 @@ module.exports = {
    * 规则配置参考 https://github.com/node-modules/parameter
    */
 
+  /**
+   * params
+   * headers
+   * query
+   * body
+   */
+  // demo: {
+  //   params: {},
+  //   headers: {},
+  //   query: {},
+  //   body: {}
+  // },
+
   checkAvailable: {
     body: {
       username: { type: 'string?' },
